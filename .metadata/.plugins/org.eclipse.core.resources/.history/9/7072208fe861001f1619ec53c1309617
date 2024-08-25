@@ -1,0 +1,16 @@
+package model;
+
+import jakarta.persistence.Entity;
+import lombok.Data;
+
+@Data
+@Entity
+public class Course {
+ @I
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+ private Long id;
+ private String title;
+ private String courseCode;
+ private String description;
+}
+

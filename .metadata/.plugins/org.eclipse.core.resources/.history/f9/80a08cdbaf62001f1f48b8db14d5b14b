@@ -1,0 +1,83 @@
+async function createCourse() {
+    const title = document.getElementById('courseTitle').value;
+    const code = document.getElementById('courseCode').value;
+    const description = document.getElementById('courseDescription').value;
+    
+    try {
+        const response = await fetch('/api/courses', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, courseCode: code, description })
+        });
+        if (response.ok) {
+            alert('Course created successfully');
+            listCourses();
+        } else {
+            alert('Error creating course');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function createCourseInstance() {
+    const courseId = document.getElementById('courseId').value;
+    const year = document.getElementById('year').value;
+    const semester = document.getElementById('semester').value;
+    
+    try {
+        const response = await fetch('/api/instances', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ courseId, year, semester })
+        });
+        if (response.ok) {
+            alert('Course instance created successfully');
+            listCourseInstances();
+        } else {
+            alert('Error creating course instance');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function listCourses() {
+    try {
+        const response = await fetch('/api/courses');
+        const courses = await response.json();
+        const courseList = document.getElementById('courseList');
+        const courseCount = document.getElementById('courseCount');
+        courseCount.textContent = courses.length;
+        courseList.innerHTML = courses.length
+            ? courses.map(course => 
+                `<li>${course.title} (${course.courseCode}) - ${course.description}</li>`
+            ).join('')
+            : '<li>No courses found</li>';
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function listCourseInstances() {
+    const year = document.getElementById('listYear').value;
+    const semester = document.getElementById('listSemester').value;
+    
+    try {
+        const response = await fetch(`/api/instances/${year}/${semester}`);
+        const instances = await response.json();
+        const instanceList = document.getElementById('instanceList');
+        const instanceCount = document.getElementById('instanceCount');
+        instanceCount.textContent = instances.length;
+        instanceList.innerHTML = instances.length
+            ? instances.map(instance => 
+                `<li>Course ID: ${instance.courseId}, Year: ${instance.year}, Semester: ${instance.semester}</li>`
+            ).join('')
+            : '<li>No instances found</li>';
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Initial load of courses
+listCourses();

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        .section { margin-bottom: 20px; }
+        input, button { margin: 5px 0; padding: 5px; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Course Management System</h1>
+
+    <div class="section">
+        <h2>Create Course</h2>
+        <input type="text" id="courseTitle" placeholder="Course Title">
+        <input type="text" id="courseCode" placeholder="Course Code">
+        <input type="text" id="courseDescription" placeholder="Course Description">
+        <button onclick="createCourse()">Create Course</button>
+    </div>
+
+    <div class="section">
+        <h2>Create Course Instance</h2>
+        <input type="number" id="courseId" placeholder="Course ID">
+        <input type="number" id="year" placeholder="Year">
+        <input type="number" id="semester" placeholder="Semester">
+        <button onclick="createCourseInstance()">Create Instance</button>
+    </div>
+
+    <div class="section">
+        <h2>List Courses</h2>
+        <button onclick="listCourses()">Refresh Course List</button>
+        <ul id="courseList"></ul>
+    </div>
+
+    <div class="section">
+        <h2>List Course Instances</h2>
+        <input type="number" id="listYear" placeholder="Year">
+        <input type="number" id="listSemester" placeholder="Semester">
+        <button onclick="listCourseInstances()">List Instances</button>
+        <ul id="instanceList"></ul>
+    </div>
+
+    <script>
+        function createCourse() {
+            const title = document.getElementById('courseTitle').value;
+            const code = document.getElementById('courseCode').value;
+            const description = document.getElementById('courseDescription').value;
+            
+            fetch('/api/courses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, courseCode: code, description })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Course created successfully');
+                listCourses();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function createCourseInstance() {
+            const courseId = document.getElementById('courseId').value;
+            const year = document.getElementById('year').value;
+            const semester = document.getElementById('semester').value;
+            
+            fetch('/api/instances', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ course: { id: courseId }, year, semester })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Course instance created successfully');
+                listCourseInstances();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function listCourses() {
+            fetch('/api/courses')
+            .then(response => response.json())
+            .then(courses => {
+                const courseList = document.getElementById('courseList');
+                courseList.innerHTML = courses.map(course => 
+                    `<li>${course.title} (${course.courseCode}) - ${course.description}</li>`
+                ).join('');
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function listCourseInstances() {
+            const year = document.getElementById('listYear').value;
+            const semester = document.getElementById('listSemester').value;
+            
+            fetch(`/api/instances/${year}/${semester}`)
+            .then(response => response.json())
+            .then(instances => {
+                const instanceList = document.getElementById('instanceList');
+                instanceList.innerHTML = instances.map(instance => 
+                    `<li>Course: ${instance.course.title}, Year: ${instance.year}, Semester: ${instance.semester}</li>`
+                ).join('');
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Initial load of courses
+        listCourses();
+    </script>
+</body>
+</html>

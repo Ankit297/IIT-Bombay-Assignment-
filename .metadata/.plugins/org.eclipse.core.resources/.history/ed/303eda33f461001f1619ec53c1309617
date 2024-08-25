@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Course Management System</h1>
+
+    <div class="section">
+        <h2>Create Course</h2>
+        <input type="text" id="courseTitle" placeholder="Course Title">
+        <input type="text" id="courseCode" placeholder="Course Code">
+        <input type="text" id="courseDescription" placeholder="Course Description">
+        <button onclick="createCourse()">Create Course</button>
+    </div>
+
+    <div class="section">
+        <h2>Create Course Instance</h2>
+        <input type="number" id="courseId" placeholder="Course ID">
+        <input type="number" id="year" placeholder="Year">
+        <input type="number" id="semester" placeholder="Semester">
+        <button onclick="createCourseInstance()">Create Instance</button>
+    </div>
+
+    <div class="section">
+        <h2>List Courses</h2>
+        <button onclick="listCourses()">Refresh Course List</button>
+        <p>Total Courses: <span id="courseCount">0</span></p>
+        <ul id="courseList"></ul>
+    </div>
+
+    <div class="section">
+        <h2>List Course Instances</h2>
+        <input type="number" id="listYear" placeholder="Year">
+        <input type="number" id="listSemester" placeholder="Semester">
+        <button onclick="listCourseInstances()">List Instances</button>
+        <p>Total Instances: <span id="instanceCount">0</span></p>
+        <ul id="instanceList"></ul>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

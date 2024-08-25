@@ -1,0 +1,32 @@
+package model;
+
+
+
+@Data
+@Entity
+public class Course {
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+ private Long id;
+ private String title;
+ private String courseCode;
+ private String description;
+}
+
+//CourseInstance.java
+package com.iitbombay.coursemanagementsystem.model;
+
+import lombok.Data;
+import javax.persistence.*;
+
+@Data
+@Entity
+public class CourseInstance {
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+ private Long id;
+ @ManyToOne
+ private Course course;
+ private int year;
+ private int semester;
+}
